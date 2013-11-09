@@ -1,0 +1,55 @@
+<Task>
+	<!-- reference task information -->
+	<Reference>
+		<Author>
+			<name>Mikołaj Kojdecki</name>
+			<link></link>
+		</Author>
+	
+		<Description>
+			<brief>Edge detection test</brief>
+			<full>Edge detection test</full>
+		</Description>
+	</Reference>
+
+	<!-- task definition -->
+	<Subtasks>
+		<Subtask name="Processing">
+			<Executor name="Exec1" period="0.05">
+				<Component name="Source" type="CvBasic:CameraOpenCV" priority="1" bump="0">
+					<param name="device">0</param>
+				</Component>
+			</Executor>
+		</Subtask>
+		<Subtask name="ConvolutionFiltering">
+			<Executor name="ProcExec" period="0.1">
+				<Component name="Processor" type="ObjectRecognition:ConvolutionFilter" priority="1" bump="0">
+                                </Component>
+			</Executor>
+		</Subtask>	
+		<Subtask name="Visualisation">
+			<Executor name="Exec2" period="0.01">
+				<Component name="Window" type="CvBasic:CvWindow" priority="1" bump="0">
+					<param name="count">2</param>
+					<param name="title">Obraz,Krawedzie</param>
+				</Component>
+			</Executor>
+		</Subtask>
+	</Subtasks>
+	
+	<!-- connections between events and handelrs -->
+	<Events>
+	</Events>
+	
+	<!-- pipes connecting datastreams -->
+	<DataStreams>
+		<Source name="Source.out_img">
+			<sink>Window.in_img0</sink>
+			<sink>Processor.in_img</sink>
+		</Source>
+		<Source name="Processor.out_img">
+			<sink>Window.in_img1</sink>
+		</Source>
+	</DataStreams>
+</Task>
+

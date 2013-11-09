@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Task>
+	<Reference>
+		<Author>
+			<name>Mikolaj Kojdecki</name>
+			<link>mkojdeck@mion.elka.pw.edu.pl</link>
+		</Author>
+
+		<Description>
+			<brief>Photo processing: vintage filter</brief>
+			<full>Processes images using Vintage filter, i.e. contrast manipulation, noise, etc.</full>
+		</Description>
+	</Reference>
+	<Subtasks>
+		<Subtask name="main">
+			<Executor name="processor.exec" period="1">
+				<Component name="Loader" type="CvBasic:Sequence" priority="1">
+					<param name="sequence.directory">%[TASK_LOCATION]%/../../CvBasic/data/opencv_classics</param>
+					<param name="sequence.pattern">.*\.jpg</param>
+					<param name="mode.loop">1</param>
+					<param name="mode.iterate">1</param>
+				</Component>
+				<Component name="VintageProcessor" type="ObjectRecognition:ConvolutionFilter" priority="2">
+				</Component>
+			</Executor>
+			<Executor name="displayer.exec" period="0.2">
+				<Component name="Displayer" type="CvBasic:CvWindow" priority="1">
+					<param name="count">1</param>
+					<param name="title">Vintage</param>
+				</Component>
+			</Executor>
+		</Subtask>
+	</Subtasks>
+
+	<DataStreams>
+		<Source name="Loader.out_img">
+			<sink>VintageProcessor.in_img</sink>
+		</Source>
+		<Source name="VintageProcessor.out_img">
+			<sink>Displayer.in_img</sink>
+		</Source>
+	</DataStreams>
+</Task>
