@@ -14,17 +14,24 @@
 
 	<!-- task definition -->
 	<Subtasks>
-		<Subtask name="Processing">
+		<Subtask name="Acquisition">
 			<Executor name="Exec1" period="0.05">
 				<Component name="Source" type="CvBasic:CameraOpenCV" priority="1" bump="0">
 					<param name="device">0</param>
 				</Component>
 			</Executor>
 		</Subtask>
-		<Subtask name="ConvolutionFiltering">
-			<Executor name="ProcExec" period="0.1">
-				<Component name="Processor" type="ObjectRecognition:MedianBlurFilter" priority="1" bump="0">
+		<Subtask name="Processing">
+			<Executor name="MedianExec" period="0.1">
+				<Component name="Median" type="ObjectRecognition:MedianBlurFilter" priority="1" bump="0">
                                 </Component>
+			</Executor>
+			<Executor name="ProcExec" period="0.1">
+				<Component name="Contrast" type="ObjectRecognition:ContrastManipulation" priority="1" bump="0">
+					<param name="contrast_gain">2.0</param>
+				</Component>
+				<Component name="Processor" type="ObjectRecognition:ConvolutionFilter" priority="2" bump="0">
+				</Component>
 			</Executor>
 		</Subtask>	
 		<Subtask name="Visualisation">
@@ -45,6 +52,12 @@
 	<DataStreams>
 		<Source name="Source.out_img">
 			<sink>Window.in_img0</sink>
+			<sink>Median.in_img</sink>
+		</Source>
+		<Source name="Median.out_img">
+			<sink>Contrast.in_img</sink>
+		</Source>
+		<Source name="Contrast.out_img">
 			<sink>Processor.in_img</sink>
 		</Source>
 		<Source name="Processor.out_img">
