@@ -7,8 +7,14 @@
 		</Author>
 	
 		<Description>
-			<brief>Edge detection test</brief>
-			<full>Edge detection test</full>
+			<brief>Processing path for detecting "go" stones</brief>
+			<full>Processing path for detecting "go" stones. For the time consists of:
+				1. Image acquisition,
+				2. Median blurring,
+				3. Contrast manipulation,
+				4. Edge detection using spatial convolution approximation of an laplassian.
+				5. Visualization for original and processed images.
+			</full>
 		</Description>
 	</Reference>
 
@@ -16,7 +22,7 @@
 	<Subtasks>
 		<Subtask name="Acquisition">
 			<Executor name="Exec1" period="0.05">
-				<Component name="Source" type="CvBasic:CameraOpenCV" priority="1" bump="0">
+				<Component name="Source" type="CameraUniCap:CameraUniCap" priority="1" bump="0">
 					<param name="device">0</param>
 				</Component>
 			</Executor>
@@ -27,12 +33,31 @@
                                 </Component>
 			</Executor>
 			<Executor name="ProcExec" period="0.1">
+				<!-- @TODO
+				<Component name="Inversion" type="ObjectRecognition:ColorInversion" priority="1" bump="0">
+				</Component> 
+				-->
 				<Component name="Contrast" type="ObjectRecognition:ContrastManipulation" priority="1" bump="0">
-					<param name="contrast_gain">2.0</param>
+					<param name="contrast_gain">6.0</param>
 				</Component>
 				<Component name="Processor" type="ObjectRecognition:ConvolutionFilter" priority="2" bump="0">
+				<!-- returns gray image -->
 				</Component>
 			</Executor>
+			<!-- @TODO
+			<Executor name="PostProcExec" period="0.1">
+				<Component name="Binarization" type="ObjectRecognition:Thresholding" priority="1" bump="0">
+					<param name="threshold">100</param>
+				</Component>
+				<Component name="Erosion" type="ObjectRecognition:Erosion" priority="1" bump="0">
+				</Component>
+				<Component name="Segmentation" type="ObjectRecognition:Segmentation" priority="3" bump="0">
+					<param name="channel>2</param>
+					<param name="start_val>30</param>
+					<param name="inc_val">5</param>
+				</Component>
+			</Executor> 
+			-->		
 		</Subtask>	
 		<Subtask name="Visualisation">
 			<Executor name="Exec2" period="0.01">
