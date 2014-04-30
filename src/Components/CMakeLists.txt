@@ -10,3 +10,7 @@ ADD_COMPONENT(Thresholding)
 ADD_COMPONENT(LogicFilter)
 
 ADD_COMPONENT(RankFiltering)
+
+ADD_COMPONENT(NewestImage)
+
+ADD_COMPONENT(BrightnessManipulation)

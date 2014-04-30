@@ -61,13 +61,18 @@ void ContrastManipulation::ProcessImage() {
 	for(int i = 0; i < img.rows; i++)
 		for(int j = 0; j < img.cols; j++)
 		{
-			img.at<cv::Vec3b>(i, j)[0] = (int) (img.at<cv::Vec3b>(i, j)[0] * contrast_gain);
-			img.at<cv::Vec3b>(i, j)[1] = (int) (img.at<cv::Vec3b>(i, j)[1] * contrast_gain);
-			img.at<cv::Vec3b>(i, j)[2] = (int) (img.at<cv::Vec3b>(i, j)[2] * contrast_gain);
+			int blue, green, red;
+			blue = img.at<cv::Vec3b>(i, j)[0] * contrast_gain;
+			green = img.at<cv::Vec3b>(i, j)[1] * contrast_gain;
+			red = img.at<cv::Vec3b>(i, j)[2] * contrast_gain;
 			
-			if(img.at<cv::Vec3b>(i, j)[0] > 255) img.at<cv::Vec3b>(i, j)[0] = 255;
-			if(img.at<cv::Vec3b>(i, j)[1] > 255) img.at<cv::Vec3b>(i, j)[1] = 255;
-			if(img.at<cv::Vec3b>(i, j)[2] > 255) img.at<cv::Vec3b>(i, j)[2] = 255; 
+			if(blue > 255) blue = 255;
+			if(green > 255) green = 255;
+			if(red > 255) red = 255;
+			
+			img.at<cv::Vec3b>(i, j)[0] = blue;
+			img.at<cv::Vec3b>(i, j)[1] = green;
+			img.at<cv::Vec3b>(i, j)[2] = red; 
 		}
 		
 	out_img.write(img);

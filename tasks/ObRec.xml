@@ -25,35 +25,46 @@
 			<Executor name="SourceExec" period="5"> <!-- było: 0.05  -->
 				<Component name="Source" type="CvBasic:Sequence" priority="1" bump="0">
 					<param name="sequence.directory">%[TASK_LOCATION]%/../obrazy</param>
-                                        <param name="sequence.pattern">.*\.png</param>
+                                        <param name="sequence.pattern">.*</param>
                                         <param name="mode.loop">1</param>
                                         <param name="mode.iterate">1</param>	
 				</Component>
-				<!-- <Component name="Source" type="CvBasic:CameraOpenCV" priority="1" bump="0">
+				<!-- <Component name="Source" type="CameraUniCap:CameraUniCap" priority="1" bump="0">
 					<param name="device">0</param>
 				</Component> -->
 			</Executor>
 		</Subtask>
 		<Subtask name="Processing">
 			<Executor name="MedianExec" period="0.1">
-				<!-- Tutaj musi być pobierany tylko najnowszy -->
-				<Component name="Median" type="ObjectRecognition:RankFiltering" priority="1" bump="0">
+				<Component name="Newest1" type="ObjectRecognition:NewestImage" priority="1" bump="0">
+				</Component>
+				<Component name="Median" type="ObjectRecognition:RankFiltering" priority="2" bump="0">
 					<param name="rank">4</param>
-                                </Component>
+                		</Component>
 			</Executor>
 			<Executor name="ProcExec" period="0.1">
 				<!-- @TODO
 				<Component name="Inversion" type="ObjectRecognition:ColorInversion" priority="1" bump="0">
 				</Component> 
 				-->
+				<Component name="Newest2" type="ObjectRecognition:NewestImage" priority="1" bump="0">
+                		</Component>
 				<Component name="Contrast" type="ObjectRecognition:ContrastManipulation" priority="1" bump="0">
-					<param name="contrast_gain">2.0</param>
+					<param name="contrast_gain">1.5</param>
 				</Component>
-				<Component name="Processor" type="ObjectRecognition:ConvolutionFilter" priority="2" bump="0">
-				<!-- returns gray image -->
+				<!-- 
+				<Component name="Brightness" type="ObjectRecognition:BrightnessManipulation" priority="1" bump="0">
+					<param name="gain">30</param>
+				</Component> -->
+				<Component name="Processor" type="CvBasic:CvCanny" priority="2" bump="0">
 				</Component>
+				<!-- <Component name="Processor" type="ObjectRecognition:ConvolutionFilter" priority="2" bump="0">
+				 returns gray image 
+				</Component> -->
 			</Executor>
 			<Executor name="PostProcExec" period="0.1">
+				<Component name="Newest3" type="ObjectRecognition:NewestImage" priority="1" bump="0">
+                		</Component>
 				<Component name="Binarization" type="ObjectRecognition:Thresholding" priority="1" bump="0">
 					<param name="threshold">100</param>
 				</Component>
@@ -62,6 +73,11 @@
 				</Component>
 			</Executor>
 			<Executor name="PostProcExec2" period="0.1">
+				<Component name="Newest4" type="ObjectRecognition:NewestImage" priority="1" bump="0">
+                		</Component>
+				<Component name="Dilation" type="ObjectRecognition:RankFiltering" priority="2" bump="0">
+					<param name="rank">8</param>
+				</Component>
 				<Component name="Erosion" type="ObjectRecognition:RankFiltering" priority="3" bump="0">
 					<param name="rank">0</param>
 				</Component>
@@ -75,7 +91,7 @@
 			</Executor> 
 		</Subtask>	
 		<Subtask name="Visualisation">
-			<Executor name="VisualExec" period="1"> <!-- było 0.01 -->
+			<Executor name="VisualExec" period="0.1"> <!-- było 0.01 -->
 				<Component name="Window" type="CvBasic:CvWindow" priority="1" bump="0">
 					<param name="count">3</param>
 					<param name="title">Obraz,Kontrast,Krawedzie</param>
@@ -92,22 +108,42 @@
 	<DataStreams>
 		<Source name="Source.out_img">
 			<sink>Window.in_img0</sink>
+			<sink>Newest1.in_img</sink>
+		</Source>
+		<Source name="Newest1.out_img">
 			<sink>Median.in_img</sink>
 		</Source>
 		<Source name="Median.out_img">
-			<sink>Contrast.in_img</sink>
+			<sink>Newest2.in_img</sink>
+		</Source>
+		<Source name="Newest2.out_img">
+            <sink>Contrast.in_img</sink>
 		</Source>
 		<Source name="Contrast.out_img">
 			<sink>Processor.in_img</sink>
 			<sink>Window.in_img1</sink>
 		</Source>
+		<!-- 
+		<Source name="Brightness.out_img">
+			<sink>Processor.in_img</sink>
+			<sink>Window.in_img1</sink>
+		</Source> -->
 		<Source name="Processor.out_img">
-			<sink>Binarization.in_img</sink>
+			<sink>Newest3.in_img</sink>
 		</Source>
+		<Source name="Newest3.out_img">
+                        <sink>Binarization.in_img</sink>
+                </Source>
 		<Source name="Binarization.out_img">
 			<sink>GSBlur.in_img</sink>
 		</Source>
 		<Source name="GSBlur.out_img">
+			<sink>Newest4.in_img</sink>
+		</Source>
+		<Source name="Newest4.out_img">
+                        <sink>Dilation.in_img</sink>
+                </Source>
+		<Source name="Dilation.out_img">
 			<sink>Erosion.in_img</sink>
 		</Source>
 		<Source name="Erosion.out_img">

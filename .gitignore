@@ -4,3 +4,11 @@
 ./dist
 build
 dist
+./CMakeFiles/*
+./CMakeFiles
+*CMakeFiles*
+*.o
+*.so
+*.cmake
+*.make
+CMakeCache.txt
