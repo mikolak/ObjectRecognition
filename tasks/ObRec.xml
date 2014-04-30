@@ -47,7 +47,7 @@
 				</Component> 
 				-->
 				<Component name="Newest2" type="ObjectRecognition:NewestImage" priority="1" bump="0">
-                		</Component>
+                </Component>
 				<Component name="Contrast" type="ObjectRecognition:ContrastManipulation" priority="1" bump="0">
 					<param name="contrast_gain">1.1</param>
 				</Component>
@@ -55,22 +55,40 @@
 				<Component name="Brightness" type="ObjectRecognition:BrightnessManipulation" priority="1" bump="0">
 					<param name="gain">30</param>
 				</Component> -->
+				<Component name="ColorConversion" type="CvBasic:CvColorConv" priority="1" bump="0">
+					<param name="conversion_type">CV_RGB2GRAY</param>
+                </Component>
 				<Component name="Processor" type="CvBasic:CvCanny" priority="2" bump="0">
+					<param name="lowerThreshold">50</param>
+					<param name="higherThreshold">150</param>
+				</Component>
+				<Component name="Binarization" type="CvBasic:CvAdaptiveThreshold" priority="2" bump="0">
+					<param name="method">ADAPTIVE_THRESH_GAUSSIAN_C</param>
+					<param name="thresholdType">THRESH_BINARY</param>
+					<param name="blockSize">3</param>
+					<param name="C">0</param>
 				</Component>
 				<!-- <Component name="Processor" type="ObjectRecognition:ConvolutionFilter" priority="2" bump="0">
 				 returns gray image 
 				</Component> -->
 			</Executor>
+			<!--
 			<Executor name="PostProcExec" period="0.1">
 				<Component name="Newest3" type="ObjectRecognition:NewestImage" priority="1" bump="0">
-                		</Component>
-				<Component name="Binarization" type="ObjectRecognition:Thresholding" priority="1" bump="0">
+                </Component>
+				<Component name="Binarization" type="CvBasic:CvAdaptiveThreshold" priority="2" bump="0">
+					<param name="method">ADAPTIVE_THRESH_GAUSSIAN_C</param>
+					<param name="thresholdType">THRESH_BINARY_INV</param>
+					<param name="blockSize">5</param>
+					<param name="C">1</param>
+				</Component> -->
+				<!-- <Component name="Binarization" type="ObjectRecognition:Thresholding" priority="1" bump="0">
 					<param name="threshold">100</param>
 				</Component>
-				<Component name="GSBlur" type="ObjectRecognition:RankFiltering" priority="2" bump="0">
+				<Component name="GSBlur" type="ObjectRecognition:RankFiltering" priority="3" bump="0">
 					<param name="rank">4</param>
 				</Component>
-			</Executor>
+			</Executor> -->
 			<Executor name="PostProcExec2" period="0.1">
 				<Component name="Newest4" type="ObjectRecognition:NewestImage" priority="1" bump="0">
                 		</Component>
@@ -91,8 +109,8 @@
 		<Subtask name="Visualisation">
 			<Executor name="VisualExec" period="0.1"> <!-- było 0.01 -->
 				<Component name="Window" type="CvBasic:CvWindow" priority="1" bump="0">
-					<param name="count">3</param>
-					<param name="title">Obraz,Kontrast,Krawedzie</param>
+					<param name="count">4</param>
+					<param name="title">Obraz,Kontrast,Krawedzie,Adaptacyjne</param>
 				</Component>
 			</Executor>
 		</Subtask>
@@ -118,29 +136,40 @@
            		<sink>Contrast.in_img</sink>
 		</Source>
 		<Source name="Contrast.out_img">
-			<sink>Processor.in_img</sink>
-			<sink>Window.in_img1</sink>
+			<sink>ColorConversion.in_img</sink>
 		</Source>
 		<!-- 
 		<Source name="Brightness.out_img">
 			<sink>Processor.in_img</sink>
 			<sink>Window.in_img1</sink>
 		</Source> -->
-		<Source name="Processor.out_img">
-			<sink>Newest3.in_img</sink>
+		<Source name="ColorConversion.out_img">
+			<sink>Processor.in_img</sink>
+			<sink>Binarization.in_img</sink>
+			<sink>Window.in_img1</sink>
 		</Source>
-		<Source name="Newest3.out_img">
-                        <sink>Binarization.in_img</sink>
-                </Source>
+		<Source name="Processor.out_img">
+			<sink>Newest4.in_img</sink>
+		</Source>
+		<Source name="Binarization.out_img">
+			<sink>Window.in_img3</sink>
+		</Source>
+		<!-- <Source name="Newest3.out_img">
+            <sink>GSBlur.in_img</sink>
+        </Source>
+        <Source name="ColorConversion.out_img">
+			<sink>Binarization.in_img</sink>
+        </Source>
 		<Source name="Binarization.out_img">
 			<sink>GSBlur.in_img</sink>
+			<sink>Window.in_img2</sink>
 		</Source>
 		<Source name="GSBlur.out_img">
 			<sink>Newest4.in_img</sink>
-		</Source>
+		</Source> -->
 		<Source name="Newest4.out_img">
-                        <sink>Dilation.in_img</sink>
-                </Source>
+            <sink>Dilation.in_img</sink>
+        </Source>
 		<Source name="Dilation.out_img">
 			<sink>Erosion.in_img</sink>
 		</Source>
