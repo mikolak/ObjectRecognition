@@ -50,7 +50,7 @@
 				<Component name="Newest2" type="ObjectRecognition:NewestImage" priority="1" bump="0">
                 		</Component>
 				<Component name="Contrast" type="ObjectRecognition:ContrastManipulation" priority="1" bump="0">
-					<param name="contrast_gain">1.5</param>
+					<param name="contrast_gain">1.1</param>
 				</Component>
 				<!-- 
 				<Component name="Brightness" type="ObjectRecognition:BrightnessManipulation" priority="1" bump="0">
