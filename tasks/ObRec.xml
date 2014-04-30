@@ -10,11 +10,10 @@
 			<brief>Processing path for detecting "go" stones</brief>
 			<full>Processing path for detecting "go" stones. For the time consists of:
 				1. Image acquisition,
-				2. Noise reduction using logic filter,
-				3. Median blurring,
-				4. Contrast manipulation,
-				5. Edge detection using spatial convolution approximation of a laplassian.
-				6. Visualization for original and processed images.
+				2. Median blurring,
+				3. Contrast manipulation,
+				4. Edge detection using spatial convolution approximation of an laplassian.
+				5. Visualization for original and processed images.
 			</full>
 		</Description>
 	</Reference>
@@ -86,8 +85,7 @@
 					<param name="channel>2</param>
 					<param name="start_val>30</param>
 					<param name="inc_val">5</param>
-				</Component>
-				-->
+				</Component> -->
 			</Executor> 
 		</Subtask>	
 		<Subtask name="Visualisation">
@@ -117,7 +115,7 @@
 			<sink>Newest2.in_img</sink>
 		</Source>
 		<Source name="Newest2.out_img">
-            <sink>Contrast.in_img</sink>
+           		<sink>Contrast.in_img</sink>
 		</Source>
 		<Source name="Contrast.out_img">
 			<sink>Processor.in_img</sink>
