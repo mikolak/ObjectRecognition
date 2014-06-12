@@ -17,9 +17,10 @@ namespace RankFiltering {
 
 RankFiltering::RankFiltering(const std::string & name) :
 		Base::Component(name) , 
-		rank("rank", 0) {
+		rank("rank", 0),
+		count("count", 1) {
 		registerProperty(rank);
-
+		registerProperty(count);
 }
 
 RankFiltering::~RankFiltering() {
@@ -54,43 +55,55 @@ bool RankFiltering::onStart() {
 }
 
 void RankFiltering::processImage() {
-	cv::Mat img = in_img.read().clone();
-	
-	if(img.channels() == 3)
+	cv::Mat readImg = in_img.read().clone();
+	cv::Mat writeImg = readImg.clone();
+	for(int run = 0; run < count; run++)
 	{
-		for(int i = 1; i < img.rows - 1; i++)
-			for(int j = 1; j < img.cols - 1; j++)
-			{
-				std::vector<std::pair<int, cv::Vec3b> > vec;
-				for(int x = i - 1; x <= i + 1; x++)
-					for(int y = j - 1; y <= j + 1; y++)
-					{
-						int val = img.at<cv::Vec3b>(i, j)[0] + img.at<cv::Vec3b>(i, j)[1] + img.at<cv::Vec3b>(i, j)[2];
-						vec.push_back(std::make_pair(val, img.at<cv::Vec3b>(i, j)));
-					}
-				bubbleSort(vec);
-				
-				img.at<cv::Vec3b>(i, j) = vec[rank].second;	
-			}
-	}
-	else if(img.channels() == 1)
-	{
-		for(int i = 1; i < img.rows - 1; i++)
-			for(int j = 1; j < img.cols - 1; j++)
-			{
-				std::vector<uchar> vec;
-				for(int x = i - 1; x <= i + 1; x++)
-					for(int y = j - 1; y <= j + 1; y++)
-					{
-						vec.push_back(img.at<uchar>(i, j));
-					}
-				bubbleSort(vec);
-				
-				img.at<uchar>(i, j) = vec[rank];	
-			}
+		if(run != 0)
+		{
+			readImg = writeImg.clone();
+			writeImg = readImg.clone();
+		}
+		
+		if(readImg.channels() == 3)
+		{
+			for(int i = 1; i < readImg.rows - 1; i++)
+				for(int j = 1; j < readImg.cols - 1; j++)
+				{
+					std::vector<std::pair<int, cv::Vec3b> > vec;
+					vec.clear();
+					for(int x = i - 1; x <= i + 1; x++)
+						for(int y = j - 1; y <= j + 1; y++)
+						{
+							int val = readImg.at<cv::Vec3b>(x, y)[0] + readImg.at<cv::Vec3b>(x, y)[1] + readImg.at<cv::Vec3b>(x, y)[2];
+							vec.push_back(std::make_pair(val, readImg.at<cv::Vec3b>(x, y)));
+						}
+					bubbleSort(vec);
+					
+					writeImg.at<cv::Vec3b>(i, j) = vec[rank].second;	
+				}
+		}
+		else if(readImg.channels() == 1)
+		{
+			for(int i = 1; i < readImg.rows - 1; i++)
+				for(int j = 1; j < readImg.cols - 1; j++)
+				{
+					std::vector<uchar> vec;
+					vec.clear();
+					for(int x = i - 1; x <= i + 1; x++)
+						for(int y = j - 1; y <= j + 1; y++)
+						{
+							vec.push_back(readImg.at<uchar>(x, y));
+						}
+					
+					bubbleSort(vec);
+					
+					writeImg.at<uchar>(i, j) = vec[rank];	
+				}
+		}
 	}
 	
-	out_img.write(img);
+	out_img.write(writeImg);
 }
 
 void RankFiltering::bubbleSort(std::vector<std::pair<int, cv::Vec3b> > & vec) {

@@ -69,14 +69,16 @@ protected:
 
 // Input data streams
 
-		Base::DataStreamIn<cv::Mat> in_img;
+	Base::DataStreamIn<cv::Mat> in_img;
 
 // Output data streams
 
-		Base::DataStreamOut<cv::Mat> out_img;
+	Base::DataStreamOut<cv::Mat> out_img;
 	// Handlers
 	Base::EventHandler2 h_processImage;
-		Base::Property<int> rank;
+	
+	Base::Property<int> rank;
+	Base::Property<int> count;
 
 	
 	// Handlers
