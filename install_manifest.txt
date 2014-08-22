@@ -1,8 +1,0 @@
-/home/calot/Projekty/workspace_cpp/DCL/ObjectRecognition/dist/lib/libConvolutionFilter.so
-/home/calot/Projekty/workspace_cpp/DCL/ObjectRecognition/dist/lib/libContrastManipulation.so
-/home/calot/Projekty/workspace_cpp/DCL/ObjectRecognition/dist/lib/libMedianBlurFilter.so
-/home/calot/Projekty/workspace_cpp/DCL/ObjectRecognition/dist/lib/libThresholding.so
-/home/calot/Projekty/workspace_cpp/DCL/ObjectRecognition/dist/lib/libLogicFilter.so
-/home/calot/Projekty/workspace_cpp/DCL/ObjectRecognition/dist/lib/libRankFiltering.so
-/home/calot/Projekty/workspace_cpp/DCL/ObjectRecognition/dist/lib/libNewestImage.so
-/home/calot/Projekty/workspace_cpp/DCL/ObjectRecognition/dist/lib/libBrightnessManipulation.so

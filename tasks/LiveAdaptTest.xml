@@ -30,6 +30,12 @@
 				</Component> -->
 				<Component name="Source" type="CameraPGR:CameraPGR" priority="1" bump="0">
 					<param name="camera_serial">13481977</param>
+					<param name="frame_rate_mode">manual</param>
+					<param name="frame_rate_value">10</param>
+					<param name="shutter_mode">manual</param>
+					<param name="shutter_value">60</param>
+					<param name="gain_mode">manual</param>
+					<param name="gain_value">0</param>
 				</Component>
 			</Executor>
 		</Subtask>
@@ -70,18 +76,22 @@
 			</Executor>
 			<Executor name="PostProcExec2" period="0.5">
 				<Component name="Newest4" type="ObjectRecognition:NewestImage" priority="1" bump="0">
-                		</Component>
-                		<Component name="Ero1" type="ObjectRecognition:RankFiltering" priority="2" bump="0">
+                </Component>
+                <Component name="Ero1" type="ObjectRecognition:RankFiltering" priority="2" bump="0">
 					<param name="rank">0</param>
-					<param name="count">1</param>
+					<param name="count">2</param>
 				</Component>
-				<Component name="Dilation" type="ObjectRecognition:RankFiltering" priority="3" bump="0">
-					<param name="rank">0</param>
-					<param name="count">1</param>
+				<Component name="Dil1" type="ObjectRecognition:RankFiltering" priority="3" bump="0">
+					<param name="rank">8</param>
+					<param name="count">2</param>
 				</Component>
 				<Component name="Erosion" type="ObjectRecognition:RankFiltering" priority="4" bump="0">
+					<param name="rank">0</param>
+					<param name="count">0</param>
+				</Component>
+				<Component name="Dilation" type="ObjectRecognition:RankFiltering" priority="3" bump="0">
 					<param name="rank">8</param>
-					<param name="count">1</param>
+					<param name="count">0</param>
 				</Component>
 			</Executor>
 		</Subtask>	
@@ -120,12 +130,15 @@
 			<sink>Ero1.in_img</sink>
 		</Source>
 		<Source name="Ero1.out_img">
-			<sink>Dilation.in_img</sink>
+			<sink>Dil1.in_img</sink>
 		</Source>
-		<Source name="Dilation.out_img">
+		<Source name="Dil1.out_img">
 			<sink>Erosion.in_img</sink>
 		</Source>
 		<Source name="Erosion.out_img">
+			<sink>Dilation.in_img</sink>
+		</Source>
+		<Source name="Dilation.out_img">
 			<sink>Window.in_img3</sink>
 		</Source>
 	</DataStreams>
