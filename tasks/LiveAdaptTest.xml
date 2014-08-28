@@ -31,11 +31,16 @@
 				<Component name="Source" type="CameraPGR:CameraPGR" priority="1" bump="0">
 					<param name="camera_serial">13481977</param>
 					<param name="frame_rate_mode">manual</param>
-					<param name="frame_rate_value">10</param>
+					<param name="frame_rate_value">8</param>
 					<param name="shutter_mode">manual</param>
-					<param name="shutter_value">60</param>
+					<param name="shutter_value">120</param>
 					<param name="gain_mode">manual</param>
-					<param name="gain_value">0</param>
+					<param name="gain_value">4.2</param>
+					<param name="brightness_mode">auto</param>
+					<param name="height">700</param>
+					<param name="width">400</param>
+					<param name="offsetX">400</param>
+					<param name="offsetY">250</param>
 				</Component>
 			</Executor>
 		</Subtask>
@@ -43,53 +48,49 @@
 			<Executor name="MedianExec" period="0.5">
 				<Component name="Newest1" type="ObjectRecognition:NewestImage" priority="1" bump="0">
 				</Component>
+				<Component name="ColorConversion" type="CvBasic:CvColorConv" priority="1" bump="0">
+					<param name="conversion_type">CV_RGB2GRAY</param>
+                </Component>
 				<Component name="Median" type="ObjectRecognition:RankFiltering" priority="2" bump="0">
 					<param name="rank">4</param>
-                		</Component>
+					<param name="count">2</param>
+                </Component>
 			</Executor>
 			<Executor name="ProcExec" period="0.5">
-				<!-- @TODO
-				<Component name="Inversion" type="ObjectRecognition:ColorInversion" priority="1" bump="0">
-				</Component> 
-				-->
 				<Component name="Newest2" type="ObjectRecognition:NewestImage" priority="1" bump="0">
-                		</Component>
-				<!-- <Component name="Contrast" type="ObjectRecognition:ContrastManipulation" priority="1" bump="0">
+                </Component>
+				<Component name="Contrast" type="ObjectRecognition:ContrastManipulation" priority="1" bump="0">
 					<param name="contrast_gain">1.1</param>
-				</Component> -->
+				</Component>
 				<!-- 
 				<Component name="Brightness" type="ObjectRecognition:BrightnessManipulation" priority="1" bump="0">
 					<param name="gain">30</param>
 				</Component> -->
-				<Component name="ColorConversion" type="CvBasic:CvColorConv" priority="1" bump="0">
-					<param name="conversion_type">CV_RGB2GRAY</param>
-                		</Component>
 				<Component name="Binarization" type="CvBasic:CvAdaptiveThreshold" priority="2" bump="0">
 					<param name="method">ADAPTIVE_THRESH_GAUSSIAN_C</param>
 					<param name="thresholdType">THRESH_BINARY</param>
 					<param name="blockSize">9</param>
 					<param name="C">2</param>
 				</Component>
-				<!-- <Component name="Processor" type="ObjectRecognition:ConvolutionFilter" priority="2" bump="0">
-				 returns gray image 
-				</Component> -->
+				<Component name="Processor" type="CvBasic:CvCanny" priority="2" bump="0"> 
+				</Component> 
 			</Executor>
 			<Executor name="PostProcExec2" period="0.5">
 				<Component name="Newest4" type="ObjectRecognition:NewestImage" priority="1" bump="0">
                 </Component>
                 <Component name="Ero1" type="ObjectRecognition:RankFiltering" priority="2" bump="0">
 					<param name="rank">0</param>
-					<param name="count">2</param>
+					<param name="count">0</param>
 				</Component>
 				<Component name="Dil1" type="ObjectRecognition:RankFiltering" priority="3" bump="0">
 					<param name="rank">8</param>
-					<param name="count">2</param>
+					<param name="count">1</param>
 				</Component>
 				<Component name="Erosion" type="ObjectRecognition:RankFiltering" priority="4" bump="0">
 					<param name="rank">0</param>
-					<param name="count">0</param>
+					<param name="count">1</param>
 				</Component>
-				<Component name="Dilation" type="ObjectRecognition:RankFiltering" priority="3" bump="0">
+				<Component name="Dilation" type="ObjectRecognition:RankFiltering" priority="5" bump="0">
 					<param name="rank">8</param>
 					<param name="count">0</param>
 				</Component>
@@ -98,8 +99,8 @@
 		<Subtask name="Visualisation">
 			<Executor name="VisualExec" period="0.5"> <!-- było 0.01 -->
 				<Component name="Window" type="CvBasic:CvWindow" priority="1" bump="0">
-					<param name="count">4</param>
-					<param name="title">Obraz,Kontrast,Adaptacyjne,Zamkniecie</param>
+					<param name="count">5</param>
+					<param name="title">Obraz,Medianowe,Adaptacyjne,Canny,Zamkniecie</param>
 				</Component>
 			</Executor>
 		</Subtask>
@@ -113,18 +114,31 @@
 	<DataStreams>
 		<Source name="Source.out_img">
 			<sink>Window.in_img0</sink>
+			<sink>Newest1.in_img</sink>
+		</Source>
+		<Source name="Newest1.out_img">
+			<sink>ColorConversion.in_img</sink>
+		</Source>
+		<Source name="ColorConversion.out_img">
+			<sink>Median.in_img</sink>
+		</Source>
+		<Source name="Median.out_img">
+			<sink>Window.in_img1</sink>
 			<sink>Newest2.in_img</sink>
 		</Source>
 		<Source name="Newest2.out_img">
-           		<sink>ColorConversion.in_img</sink>
-		</Source>
-		<Source name="ColorConversion.out_img">
-			<sink>Binarization.in_img</sink>
-			<sink>Window.in_img1</sink>
+			<sink>Contrast.in_img</sink>
+		</Source>	
+		<Source name="Contrast.out_img">
+           		<sink>Binarization.in_img</sink>
 		</Source>
 		<Source name="Binarization.out_img">
 			<sink>Window.in_img2</sink>
+			<sink>Processor.in_img</sink>
+		</Source>
+		<Source name="Processor.out_img">
 			<sink>Newest4.in_img</sink>
+			<sink>Window.in_img3</sink>
 		</Source>
 		<Source name="Newest4.out_img">
 			<sink>Ero1.in_img</sink>
@@ -139,7 +153,7 @@
 			<sink>Dilation.in_img</sink>
 		</Source>
 		<Source name="Dilation.out_img">
-			<sink>Window.in_img3</sink>
+			<sink>Window.in_img4</sink>
 		</Source>
 	</DataStreams>
 </Task>

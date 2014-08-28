@@ -58,23 +58,41 @@ void ContrastManipulation::ProcessImage() {
 	img = img.clone();
 	
 	//cout << img.depth() << " chan " << img.channels() << endl;
-	for(int i = 0; i < img.rows; i++)
-		for(int j = 0; j < img.cols; j++)
-		{
-			int blue, green, red;
-			blue = img.at<cv::Vec3b>(i, j)[0] * contrast_gain;
-			green = img.at<cv::Vec3b>(i, j)[1] * contrast_gain;
-			red = img.at<cv::Vec3b>(i, j)[2] * contrast_gain;
-			
-			if(blue > 255) blue = 255;
-			if(green > 255) green = 255;
-			if(red > 255) red = 255;
-			
-			img.at<cv::Vec3b>(i, j)[0] = blue;
-			img.at<cv::Vec3b>(i, j)[1] = green;
-			img.at<cv::Vec3b>(i, j)[2] = red; 
-		}
-		
+	if(img.channels() == 3)
+	{
+		for(int i = 0; i < img.rows; i++)
+			for(int j = 0; j < img.cols; j++)
+			{
+				int blue, green, red;
+				blue = img.at<cv::Vec3b>(i, j)[0] * contrast_gain;
+				green = img.at<cv::Vec3b>(i, j)[1] * contrast_gain;
+				red = img.at<cv::Vec3b>(i, j)[2] * contrast_gain;
+				
+				if(blue > 255) blue = 255;
+				if(green > 255) green = 255;
+				if(red > 255) red = 255;
+				
+				img.at<cv::Vec3b>(i, j)[0] = blue;
+				img.at<cv::Vec3b>(i, j)[1] = green;
+				img.at<cv::Vec3b>(i, j)[2] = red; 
+			}
+	}
+	else if(img.channels() == 1)
+	{
+		for(int i = 1; i < img.rows; i++)
+				for(int j = 1; j < img.cols; j++)
+				{
+					int val;
+					val = img.at<uchar>(i, j) * contrast_gain;
+					if(val > 255) val = 255;
+					img.at<uchar>(i, j) = (uchar) val;	
+				}
+	}
+	else
+	{
+		LOG(LFATAL) << "Component " << name() << " " << "in_img received image must have either three or one channel.";
+		return;
+	}
 	out_img.write(img);
 }
 
