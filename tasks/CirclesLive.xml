@@ -35,9 +35,9 @@
 					<param name="shutter_mode">manual</param>
 					<param name="shutter_value">120</param>
 					<param name="gain_mode">manual</param>
-					<param name="gain_value">4.2</param>
+					<param name="gain_value">0.0</param>
 					<param name="brightness_mode">auto</param>
-					<param name="height">700</param>
+					<param name="height">600</param>
 					<param name="width">400</param>
 					<param name="offsetX">400</param>
 					<param name="offsetY">250</param>
@@ -53,14 +53,14 @@
                 </Component>
 				<Component name="Median" type="ObjectRecognition:RankFiltering" priority="2" bump="0">
 					<param name="rank">4</param>
-					<param name="count">2</param>
+					<param name="count">3</param>
                 </Component>
 			</Executor>
 			<Executor name="ProcExec" period="0.5">
 				<Component name="Newest2" type="ObjectRecognition:NewestImage" priority="1" bump="0">
                 </Component>
 				<Component name="Contrast" type="ObjectRecognition:ContrastManipulation" priority="2" bump="0">
-					<param name="contrast_gain">1.1</param>
+					<param name="contrast_gain">1.0</param>
 				</Component>
 				<!-- 
 				<Component name="Brightness" type="ObjectRecognition:BrightnessManipulation" priority="1" bump="0">
@@ -75,10 +75,10 @@
 				<Component name="Processor" type="CvBasic:CvHoughCircles" priority="3" bump="0"> 
 					<param name="inverseRatioOfAccumulatorResolution">1</param>
 					<param name="minDist">50</param>
-					<param name="cannyHigherThreshold">220</param>
-					<param name="accumulatorThreshold">100</param>
-					<param name="minCircleRadius">50</param>
-					<param name="maxCircleRadius">100</param>
+					<param name="cannyHigherThreshold">250</param>
+					<param name="accumulatorThreshold">30</param>
+					<param name="minCircleRadius">30</param>
+					<param name="maxCircleRadius">80</param>
 				</Component>
 				<Component name="Visualizer" type="ObjectRecognition:DrawDetectedCircles" priority="4" bump="0">
 				</Component> 
@@ -140,7 +140,6 @@
 		</Source>	
 		<Source name="Contrast.out_img">
            	<sink>Binarization.in_img</sink>
-			<sink>Processor.in_img</sink>
 		</Source>
 		<Source name="Binarization.out_img">
 			<sink>Window.in_img2</sink>
@@ -149,7 +148,7 @@
 		<Source name="Processor.out_circles">
 			<sink>Visualizer.in_circles</sink>
 		</Source>
-		<Source name="Visualizer">
+		<Source name="Visualizer.out_img">
 			<sink>Window.in_img3</sink>
 		</Source>
 		<Source name="Newest4.out_img">
@@ -166,6 +165,7 @@
 		</Source>
 		<Source name="Dilation.out_img">
 			<sink>Window.in_img4</sink>
+			<sink>Processor.in_img</sink>
 		</Source>
 	</DataStreams>
 </Task>

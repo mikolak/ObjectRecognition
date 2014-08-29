@@ -58,6 +58,7 @@ void DrawDetectedCircles::onNewImage() {
 	cv::Mat img = in_img.read().clone();
 	
 	circles.draw(img, 240, 0, 0);
+	std::cout << "Znalazlem " << circles.circles.size() << " kregow." << std::endl;
 	
 	out_img.write(img);
 }
