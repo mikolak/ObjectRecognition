@@ -14,3 +14,4 @@ dist
 *.cmake
 *.make
 CMakeCache.txt
+./src/Components/CMakeList.txt
