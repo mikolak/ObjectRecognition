@@ -12,7 +12,7 @@
 #include "DataStream.hpp"
 #include "Property.hpp"
 #include "EventHandler2.hpp"
-#include "Types/Circles/Circles.hpp"
+#include "Types/Circles.hpp"
 
 #include <opencv2/opencv.hpp>
 
