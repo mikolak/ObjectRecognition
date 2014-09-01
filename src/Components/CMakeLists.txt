@@ -16,3 +16,5 @@ ADD_COMPONENT(NewestImage)
 ADD_COMPONENT(BrightnessManipulation)
 
 ADD_COMPONENT(DrawDetectedCircles)
+
+ADD_COMPONENT(Demux)

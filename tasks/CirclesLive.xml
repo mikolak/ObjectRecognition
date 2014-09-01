@@ -49,7 +49,7 @@
 				<Component name="Newest1" type="ObjectRecognition:NewestImage" priority="1" bump="0">
 				</Component>
 				<Component name="ColorConversion" type="CvBasic:CvColorConv" priority="1" bump="0">
-					<param name="conversion_type">CV_RGB2GRAY</param>
+					<param name="type">CV_RGB2GRAY</param>
                 </Component>
 				<Component name="Median" type="ObjectRecognition:RankFiltering" priority="2" bump="0">
 					<param name="rank">4</param>
@@ -72,16 +72,6 @@
 					<param name="blockSize">9</param>
 					<param name="C">2</param>
 				</Component>
-				<Component name="Processor" type="CvBasic:CvHoughCircles" priority="3" bump="0"> 
-					<param name="inverseRatioOfAccumulatorResolution">1</param>
-					<param name="minDist">50</param>
-					<param name="cannyHigherThreshold">250</param>
-					<param name="accumulatorThreshold">30</param>
-					<param name="minCircleRadius">30</param>
-					<param name="maxCircleRadius">80</param>
-				</Component>
-				<Component name="Visualizer" type="ObjectRecognition:DrawDetectedCircles" priority="4" bump="0">
-				</Component> 
 			</Executor>
 			<Executor name="PostProcExec2" period="0.5">
 				<Component name="Newest4" type="ObjectRecognition:NewestImage" priority="1" bump="0">
@@ -102,10 +92,28 @@
 					<param name="rank">8</param>
 					<param name="count">0</param>
 				</Component>
+				<Component name="Processor" type="CvBasic:CvHoughCircles" priority="6" bump="0"> 
+					<param name="inverseRatioOfAccumulatorResolution">1</param>
+					<param name="minDist">50</param>
+					<param name="cannyHigherThreshold">250</param>
+					<param name="accumulatorThreshold">30</param>
+					<param name="minCircleRadius">30</param>
+					<param name="maxCircleRadius">80</param>
+				</Component>
+				<Component name="Demux" type="ObjectRecognition:Demux" priority="7" bump="0">
+				</Component>
+				<Component name="XProxy" type="ROSProxy:FloatProxy" priority="8" bump="0">
+					<param name="ros.topic_name">center_x</param>
+				</Component>
+				<Component name="YProxy" type="ROSProxy:FloatProxy" priority="9" bump="0">
+					<param name="ros.topic_name">center_y</param>
+				</Component>
 			</Executor>
 		</Subtask>	
 		<Subtask name="Visualisation">
 			<Executor name="VisualExec" period="0.5"> <!-- było 0.01 -->
+				<Component name="Visualizer" type="ObjectRecognition:DrawDetectedCircles" priority="4" bump="0">
+				</Component>
 				<Component name="Window" type="CvBasic:CvWindow" priority="1" bump="0">
 					<param name="count">5</param>
 					<param name="title">Obraz,Medianowe,Adaptacyjne,Canny,Zamkniecie</param>
