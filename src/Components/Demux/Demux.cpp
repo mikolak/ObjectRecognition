@@ -57,6 +57,7 @@ void Demux::onNewCircle() {
 	
 	if(!circles.circles.empty())
 	{
+		std::cout << "NIEPUSTE============================" << endl;
 		int index = 0;
 		for(int i = 0; i < circles.circles.size(); i++)
 		{
@@ -67,6 +68,8 @@ void Demux::onNewCircle() {
 		out_x.write(circles.circles[index][0]);
 		out_y.write(circles.circles[index][1]);
 	}
+	else
+		std::cout << "PUSTE~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 }
 
 
