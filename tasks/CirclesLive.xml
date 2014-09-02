@@ -35,6 +35,8 @@
 					<param name="shutter_mode">manual</param>
 					<param name="shutter_value">120</param>
 					<param name="gain_mode">manual</param>
+					<!-- Dla czarnych gain_value = 5
+						 Dla białych gain_value = 0	-->
 					<param name="gain_value">0.0</param>
 					<param name="brightness_mode">auto</param>
 					<param name="height">500</param>
