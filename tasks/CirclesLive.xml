@@ -64,10 +64,6 @@
 				<Component name="Contrast" type="ObjectRecognition:ContrastManipulation" priority="2" bump="0">
 					<param name="contrast_gain">1.0</param>
 				</Component>
-				<!-- 
-				<Component name="Brightness" type="ObjectRecognition:BrightnessManipulation" priority="1" bump="0">
-					<param name="gain">30</param>
-				</Component> -->
 				<Component name="Binarization" type="CvBasic:CvAdaptiveThreshold" priority="3" bump="0">
 					<param name="method">ADAPTIVE_THRESH_GAUSSIAN_C</param>
 					<param name="thresholdType">THRESH_BINARY</param>
