@@ -37,11 +37,11 @@
 					<param name="gain_mode">manual</param>
 					<!-- Dla czarnych gain_value = 5
 						 Dla białych gain_value = 0	-->
-					<param name="gain_value">-0.5</param>
+					<param name="gain_value">0.0</param>
 					<param name="brightness_mode">auto</param>
 					<param name="height">500</param>
 					<param name="width">400</param>
-					<param name="offsetX">480</param>
+					<param name="offsetX">460</param>
 					<param name="offsetY">250</param>
 				</Component>
 			</Executor>
@@ -94,9 +94,9 @@
 					<param name="inverseRatioOfAccumulatorResolution">1</param>
 					<param name="minDist">50</param>
 					<param name="cannyHigherThreshold">250</param>
-					<param name="accumulatorThreshold">25</param>
+					<param name="accumulatorThreshold">24</param>
 					<param name="minCircleRadius">30</param>
-					<param name="maxCircleRadius">70</param>
+					<param name="maxCircleRadius">65</param>
 				</Component>
 				<Component name="Demux" type="ObjectRecognition:Demux" priority="7" bump="0">
 				</Component>
