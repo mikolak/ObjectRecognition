@@ -33,9 +33,11 @@
 					<param name="frame_rate_mode">manual</param>
 					<param name="frame_rate_value">8</param>
 					<param name="shutter_mode">manual</param>
-					<param name="shutter_value">100</param>
+					<!-- Dla czarnych shutter_value = 120
+						 Dla białych shutter_value = 80 -->
+					<param name="shutter_value">80</param>
 					<param name="gain_mode">manual</param>
-					<!-- Dla czarnych gain_value = 5
+					<!-- Dla czarnych gain_value = 2
 						 Dla białych gain_value = 0	-->
 					<param name="gain_value">0.0</param>
 					<param name="brightness_mode">auto</param>
